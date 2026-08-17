@@ -1,5 +1,5 @@
-const TOTAL_DAYS=80;
-const START_DATE='2026-08-13';
+const TOTAL_DAYS=77;
+const START_DATE='2026-08-18';
 const KEY='eighty-days-of-bok-records';
 const MISSION_KEY='eighty-days-of-bok-missions';
 const encouragements=[['첫 걸음을<br>응원해요','완벽하지 않아도 괜찮아요.<br>시작한 마음 자체가 이미 복입니다.'],['오늘의 정성이<br>빛나고 있어요','짧은 실천도 괜찮아요.<br>쌓인 마음은 분명 나를 바꿔요.'],['참 잘하고<br>있어요','두 가지를 해낸 오늘,<br>꾸준한 내가 정말 대단해요.'],['오늘은 팡파레예요!','신·행·학 세 가지를 모두 해냈어요.<br>나를 마음껏 칭찬해 주세요 🎉']];
@@ -24,3 +24,13 @@ function setDate(){const d=new Date();document.querySelector('#todayDate').textC
 document.querySelector('#recordForm').addEventListener('submit',e=>{e.preventDefault();const day=getCurrentDay();const sin=Number(document.querySelector('#practiceSin').value)||0;const haeng=document.querySelector('#practiceHaeng').value.trim();const bookTitle=document.querySelector('#practiceBookTitle').value.trim();const hak=Number(document.querySelector('#practiceHak').value)||0;if(!sin&&!haeng&&!bookTitle&&!hak){showToast('신·행·학 중 하나 이상 기록해 주세요.');return}records[day]={hours:sin,sin,haeng,bookTitle,hak,note:document.querySelector('#practiceNote').value,date:dateForDay(day)};localStorage.setItem(KEY,JSON.stringify(records));document.querySelector('#savedState').hidden=false;document.querySelector('#recordForm').reset();renderGrid();updateStats();showToast(categoryCount(records[day])===3?'🎉 팡파레! 오늘은 세 가지 모두 완료했어요!':`🪷 복운도장 ${categoryCount(records[day])}개가 찍혔어요!`)});
 document.querySelectorAll('.mission-check').forEach(button=>button.addEventListener('click',()=>{const key=button.closest('.mission-item').dataset.mission;missions[key]=!missions[key];localStorage.setItem(MISSION_KEY,JSON.stringify(missions));renderMissions();showToast(missions[key]?'🥮 송편 도장이 찍혔어요!':'송편 도장을 다시 비웠어요.')}));
 document.querySelector('#resetBtn').addEventListener('click',()=>{if(confirm('모든 기록을 지우고 새로 시작할까요?')){localStorage.removeItem(KEY);localStorage.removeItem(MISSION_KEY);location.reload()}});function showToast(t){const el=document.querySelector('#toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2800)}renderMilestones();setDate();renderGrid();updateStats();renderMissions();
+document.querySelector('#heroDay').parentElement.lastChild.textContent=' / 77';
+document.querySelector('#completedLabel').textContent=`${getDoneDays().length} / ${TOTAL_DAYS}일 완료`;
+document.querySelector('.journey-panel .section-kicker').textContent='MY 76-DAY JOURNEY';
+document.querySelector('.journey-intro').textContent='2026.08.18 ~ 2026.11.02 · 항목을 1개만 해도 도장 1개, 2개면 도장 2개, 3개 모두 하면 🎉';
+document.querySelector('#final h2').innerHTML='76일 뒤, 나는 무엇을<br><em>만들어냈을까요?</em>';
+document.querySelector('#final p').innerHTML='76일의 기록이 쌓이면<br>나만의 변화 리포트가 완성됩니다.';
+document.querySelector('#final .final-orbit span').textContent='76';
+document.querySelector('.nav-item[href="#final"]').lastChild.textContent='76일의 결과';
+const originalUpdateStats=updateStats;
+updateStats=()=>{originalUpdateStats();document.querySelector('#completedLabel').textContent=`${getDoneDays().length} / ${TOTAL_DAYS}일 완료`;document.querySelector('#final h2').innerHTML='76일 뒤, 나는 무엇을<br><em>만들어냈을까요?</em>';document.querySelector('#final p').innerHTML='76일의 기록이 쌓이면<br>나만의 변화 리포트가 완성됩니다.';document.querySelector('#final .final-orbit span').textContent='76'};
